@@ -1,0 +1,16 @@
+CREATE DATABASE music_db;
+USE music_db;
+
+CREATE TABLE songs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    duration INT NOT NULL
+);
+
+CREATE TABLE artists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+SHOW TABLES;
+SELECT * FROM songs;

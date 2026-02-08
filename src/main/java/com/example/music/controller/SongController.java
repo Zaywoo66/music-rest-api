@@ -1,6 +1,7 @@
 package com.example.music.controller;
 
-import com.example.music.model.Song;
+import com.example.music.dto.SongRequestDTO;
+import com.example.music.dto.SongResponseDTO;
 import com.example.music.service.SongService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +17,38 @@ public class SongController {
         this.service = service;
     }
 
-    @PostMapping
-    public Song add(@RequestBody Song song) {
-        return service.save(song);
+    @GetMapping
+    public List<SongResponseDTO> getAllSongs() {
+        return service.getAllSongs();
     }
 
-    @GetMapping
-    public List<Song> getAll() {
-        return service.findAll();
+    @GetMapping("/{id}")
+    public SongResponseDTO getSongById(@PathVariable Long id) {
+        return service.getSongById(id);
+    }
+
+    @PostMapping
+    public SongResponseDTO createSong(@RequestBody SongRequestDTO dto) {
+        return service.createSong(dto);
+    }
+
+    @PutMapping("/{id}")
+    public SongResponseDTO updateSong(@PathVariable Long id,
+                                      @RequestBody SongRequestDTO dto) {
+        return service.updateSong(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteSong(@PathVariable Long id) {
+        service.deleteSong(id);
+        return "Deleted song with id = " + id;
+    }
+
+    // extra endpoint: sorting feature
+    @GetMapping("/sorted")
+    public List<SongResponseDTO> getSortedSongs() {
+        return service.getSongsSortedByDuration();
     }
 }
+
 

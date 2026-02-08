@@ -1,0 +1,8 @@
+### Add new song
+POST http://localhost:8080/songs
+Content-Type: application/json
+
+{
+  "title": "Numb",
+  "duration": 185
+}

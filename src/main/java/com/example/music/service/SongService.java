@@ -1,26 +1,22 @@
 package com.example.music.service;
 
-import com.example.music.model.Song;
-import com.example.music.repository.SongRepository;
-import org.springframework.stereotype.Service;
+import com.example.music.dto.SongRequestDTO;
+import com.example.music.dto.SongResponseDTO;
 
 import java.util.List;
 
-@Service
-public class SongService {
+public interface SongService {
 
-    private final SongRepository repository;
+    SongResponseDTO createSong(SongRequestDTO dto);
 
-    public SongService(SongRepository repository) {
-        this.repository = repository;
-    }
+    List<SongResponseDTO> getAllSongs();
 
-    public Song save(Song song) {
-        return repository.save(song);
-    }
+    SongResponseDTO getSongById(Long id);
 
-    public List<Song> findAll() {
-        return repository.findAll();
-    }
+    SongResponseDTO updateSong(Long id, SongRequestDTO dto);
+
+    void deleteSong(Long id);
+
+    List<SongResponseDTO> getSongsSortedByDuration();
 }
 

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Music App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Music Database</h1>
+
+<h2>Add Song</h2>
+
+<input type="text" id="title" placeholder="Song title">
+<input type="number" id="duration" placeholder="Duration (sec)">
+<button onclick="addSong()">Add</button>
+
+<h2>Song List</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Duration</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="songTable"></tbody>
+</table>
+
+<script>
+    const API_URL = "http://localhost:8080/songs";
+
+    async function loadSongs() {
+        const response = await fetch(API_URL);
+        const songs = await response.json();
+
+        const table = document.getElementById("songTable");
+        table.innerHTML = "";
+
+        songs.forEach(song => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${song.id}</td>
+                <td>${song.title}</td>
+                <td>${song.duration}</td>
+                <td>
+                    <button onclick="deleteSong(${song.id})">Delete</button>
+                </td>
+            `;
+
+            table.appendChild(row);
+        });
+    }
+
+    async function addSong() {
+        const title = document.getElementById("title").value;
+        const duration = document.getElementById("duration").value;
+
+        const song = { title, duration };
+
+        await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(song)
+        });
+
+        document.getElementById("title").value = "";
+        document.getElementById("duration").value = "";
+
+        loadSongs();
+    }
+
+    async function deleteSong(id) {
+        await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
+
+        loadSongs();
+    }
+
+    loadSongs();
+</script>
+
+</body>
+</html>
